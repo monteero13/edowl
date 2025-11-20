@@ -51,7 +51,7 @@ def graph_rdf(path: str, graph, schema) -> Graph:
         #######################
 
         uri_catalogo = (
-            uri_edaan + "catalog" + catalogo["@id"].capitalize().replace(" ", "_")
+            uri_edaan + "catalog" + catalogo["@id"].capitalize().replace("-", "_")
         )
         type_catalog = uri_dcat + "Catalog"
         
@@ -67,7 +67,7 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                 (
                     rdflib.URIRef(uri_catalogo),
                     rdflib.URIRef(uri_dct + "title"),
-                    rdflib.URIRef(rdflib.Literal(catalogo["dct:title"])),
+                    rdflib.Literal(catalogo["dct:title"]),
                 )
             )
         
@@ -75,7 +75,7 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                 (
                     rdflib.URIRef(uri_catalogo),
                     rdflib.URIRef(uri_dct + "description"),
-                    rdflib.URIRef(rdflib.Literal(catalogo["dct:description"])),
+                    rdflib.Literal(catalogo["dct:description"]),
                 )
             )
         
@@ -83,15 +83,17 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                 (
                     rdflib.URIRef(uri_catalogo),
                     rdflib.URIRef(uri_dct + "issued"),
-                    rdflib.URIRef(rdflib.Literal(catalogo["dct:issued"])),
+                    rdflib.Literal(catalogo["dct:issued"]),
                 )
             )
-
-        ##########################
-        #                        #
-        #      Data assets       #
-        #                        #
-        ##########################
+        
+        g.add(
+                (
+                    rdflib.URIRef(uri_catalogo),
+                    rdflib.URIRef(uri_dct + "publisher"),
+                    rdflib.Literal(catalogo["dct:publisher"]),
+                )
+            )
 
         
         if error_in_modelage != 1:
@@ -121,7 +123,7 @@ def main(schema):
     for root, dirs, files in os.walk(os.getcwd()):
         for file in files:
             if (
-                "annotation" in file
+                "catalog" in file
                 and ".json" in file
                 and "annotation.schema.json" not in file
             ):
@@ -130,7 +132,7 @@ def main(schema):
     print("Number of components: ", p, "\n")
 
     owl_file = open(
-        "ontology/EDAAnOWL.owl",
+        "ontology/EDAAnOWL.ttl",
         "w",
     )
     owl_file.write(g.serialize(format="nt"))
