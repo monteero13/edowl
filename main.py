@@ -42,7 +42,6 @@ def graph_rdf(path: str, graph, schema) -> Graph:
         uri_dct   = "http://purl.org/dc/terms/"
         uri_odrl = "http://www.w3.org/ns/odrl/2/"
         uri_csvw = "http://www.w3.org/ns/csvw#"
-        uri_foaf = "http://xmlns.com/foaf/0.1/"
 
         g = graph
 
@@ -373,7 +372,7 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                         g.add(
                             (
                                 rdflib.URIRef(uri_representation),
-                                rdflib.URIRef(uri_edaan + "encoding"),
+                                rdflib.URIRef(uri_bigowl + "encoding"),
                                 rdflib.Literal(representation["encoding"]),
                             )
                         )
@@ -460,7 +459,7 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                             )
                         )
                     if(contract.get("odrl:hasPolicy")):
-                        uri_hasPolicy = uri_edaan + "hasPolicy"
+                        uri_hasPolicy = uri_edaan + "hasPolicy"  + str(uuid.uuid1())
                         g.add(
                             (
                                 rdflib.URIRef(uri_contract),
