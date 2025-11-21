@@ -40,9 +40,13 @@ def graph_rdf(path: str, graph, schema) -> Graph:
         uri_idsa = "https://w3id.org/idsa/core/"
         uri_dcat = "http://www.w3.org/ns/dcat#"
         uri_dct   = "http://purl.org/dc/terms/"
-
+        uri_odrl = "http://www.w3.org/ns/odrl/2/"
+        uri_csvw = "http://www.w3.org/ns/csvw#"
+        uri_foaf = "http://xmlns.com/foaf/0.1/"
 
         g = graph
+
+        g.parse("ontology/EDAAnOWL.ttl", format="turtle")
         
         #######################
         #                     #
@@ -179,6 +183,355 @@ def graph_rdf(path: str, graph, schema) -> Graph:
                         rdflib.Literal(dataasset["dcat:keyword"]),
                     )
                 )
+            if(dataasset.get("topicTags")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_edaan + "topicTags"),
+                        rdflib.Literal(dataasset["topicTags"]),
+                    )
+                )
+            if(dataasset.get("dct:publisher")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "publisher"),
+                        rdflib.Literal(dataasset["dct:publisher"]),
+                    )
+                )
+            if(dataasset.get("dct:creator")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "creator"),
+                        rdflib.Literal(dataasset["dct:creator"]),
+                    )
+                )
+            if(dataasset.get("ids:sovereign")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_idsa + "sovereign"),
+                        rdflib.Literal(dataasset["ids:sovereign"]),
+                    )
+                )
+            if(dataasset.get("ids:contactPoint")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_idsa + "contactPoint"),
+                        rdflib.Literal(dataasset["ids:contactPoint"]),
+                    )
+                )
+            if(dataasset.get("dct:theme")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "theme"),
+                        rdflib.Literal(dataasset["dct:theme"]),
+                    )
+                )
+            if(dataasset.get("dct:spatial")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "spatial"),
+                        rdflib.Literal(dataasset["dct:spatial"]),
+                    )
+                )
+            if(dataasset.get("dct:temporal")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "temporal"),
+                        rdflib.Literal(dataasset["dct:temporal"]),
+                    )
+                )
+            if(dataasset.get("dct:language")):
+                for lang in dataasset["dct:language"]:
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_dataasset),
+                            rdflib.URIRef(uri_dct + "language"),
+                            rdflib.Literal(lang),
+                        )
+                    )
+            if(dataasset.get("dct:issued")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "issued"),
+                        rdflib.Literal(dataasset["dct:issued"]),
+                    )
+                )
+            if(dataasset.get("dct:modified")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "modified"),
+                        rdflib.Literal(dataasset["dct:modified"]),
+                    )
+                )
+            if(dataasset.get("ids:provenance")):
+                uri_provenance = uri_edaan + "provenance"
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_idsa + "provenance"),
+                        rdflib.URIRef(uri_provenance),
+                    )
+                )
+                g.add(
+                    (
+                        rdflib.URIRef(uri_provenance),
+                        RDF.type,
+                        rdflib.URIRef(uri_idsa),
+                    )
+                )
+                if(dataasset["ids:provenance"].get("resource")):
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_provenance),
+                            rdflib.URIRef(uri_edaan + "resource"),
+                            rdflib.Literal(dataasset["ids:provenance"]["resource"]),
+                        )
+                    )
+                if(dataasset["ids:provenance"].get("collectionMethod")):
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_provenance),
+                            rdflib.URIRef(uri_edaan + "collectionMethod"),
+                            rdflib.Literal(dataasset["ids:provenance"]["collectionMethod"]),
+                        )
+                    )
+                if(dataasset["ids:provenance"].get("fieldProvenance")):
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_provenance),
+                            rdflib.URIRef(uri_edaan + "fieldProvenance"),
+                            rdflib.Literal(dataasset["ids:provenance"]["fieldProvenance"]),
+                        )
+                    )
+            if(dataasset.get("dataUtility")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_edaan + "dataUtility"),
+                        rdflib.Literal(dataasset["dataUtility"]),
+                    )
+                )
+            if(dataasset.get("dct:license")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_dct + "license"),
+                        rdflib.Literal(dataasset["dct:license"]),
+                    )
+                )
+            if(dataasset.get("securityPrivacy")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_edaan + "securityPrivacy"),
+                        rdflib.Literal(dataasset["securityPrivacy"]),
+                    )
+                )
+            if(dataasset.get("ids:representation")):
+                for representation in dataasset["ids:representation"]:
+                    uri_representation = uri_edaan + str(representation["@id"]).capitalize().replace("-","_")
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_dataasset),
+                            rdflib.URIRef(uri_idsa + "representation"),
+                            rdflib.URIRef(uri_representation),
+                        )
+                    )
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_representation),
+                            RDF.type,
+                            rdflib.URIRef(uri_idsa + "Representation"),
+                        )
+                    )
+                    if(representation.get("dcat:mediaType")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_representation),
+                                rdflib.URIRef(uri_dcat + "mediaType"),
+                                rdflib.Literal(representation["dcat:mediaType"]),
+                            )
+                        )
+                    if(representation.get("ids:representationStandard")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_representation),
+                                rdflib.URIRef(uri_idsa + "representationStandard"),
+                                rdflib.Literal(representation["ids:representationStandard"]),
+                            )
+                        )
+                    if(representation.get("encoding")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_representation),
+                                rdflib.URIRef(uri_edaan + "encoding"),
+                                rdflib.Literal(representation["encoding"]),
+                            )
+                        )
+                    if(representation.get("csvw:dialect")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_representation),
+                                rdflib.URIRef(uri_csvw + "dialect"),
+                                rdflib.Literal(representation["csvw:dialect"]),
+                            )
+                        )
+                    if(representation.get("ids:instance")):
+                        for instance in representation["ids:instance"]:
+                            uri_artifact = uri_edaan + instance["@id"]
+                            g.add(
+                                (
+                                    rdflib.URIRef(uri_representation),
+                                    rdflib.URIRef(uri_idsa + "instance"),
+                                    rdflib.URIRef(uri_artifact),
+                                )
+                            )
+                            g.add(
+                                (
+                                    rdflib.URIRef(uri_artifact),
+                                    RDF.type,
+                                    rdflib.URIRef(uri_idsa + "Artifact"),
+                                )
+                            )
+                            if(instance.get("ids:fileName")):
+                                g.add(
+                                    (
+                                        rdflib.URIRef(uri_artifact),
+                                        rdflib.URIRef(uri_idsa + "fileName"),
+                                        rdflib.Literal(instance["ids:fileName"]),
+                                    )
+                                )
+                            if(instance.get("ids:byteSize")):
+                                g.add(
+                                    (
+                                        rdflib.URIRef(uri_artifact),
+                                        rdflib.URIRef(uri_idsa + "byteSize"),
+                                        rdflib.Literal(instance["ids:byteSize"]),
+                                    )
+                                )
+                            if(instance.get("ids:checkSum")):
+                                g.add(
+                                    (
+                                        rdflib.URIRef(uri_artifact),
+                                        rdflib.URIRef(uri_idsa + "checkSum"),
+                                        rdflib.Literal(instance["ids:checkSum"])
+                                    )
+                                )
+                            if(instance.get("ids:creationDate")):
+                                g.add(
+                                    (
+                                        rdflib.URIRef(uri_artifact),
+                                        rdflib.URIRef(uri_idsa + "creationDate"),
+                                        rdflib.Literal(instance["ids:creationDate"]),
+                                    )
+                                )
+            if(dataasset.get("ids:contractOffer")):
+                for contract in dataasset["ids:contractOffer"]:
+                    uri_contract = uri_edaan + contract["@id"]
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_dataasset),
+                            rdflib.URIRef(uri_idsa + "contractOffer"),
+                            rdflib.URIRef(uri_contract),
+                        )
+                    )
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_contract),
+                            RDF.type,
+                            rdflib.URIRef(uri_idsa + "ContractOffer"),
+                        )
+                    )
+                    if(contract.get("dct:title")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_contract),
+                                rdflib.URIRef(uri_dct + "title"),
+                                rdflib.Literal(contract["dct:title"]),
+                            )
+                        )
+                    if(contract.get("odrl:hasPolicy")):
+                        uri_hasPolicy = uri_edaan + "hasPolicy"
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_contract),
+                                rdflib.URIRef(uri_odrl + "hasPolicy"),
+                                rdflib.URIRef(uri_hasPolicy),
+                            )
+                        )
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_hasPolicy),
+                                RDF.type,
+                                rdflib.URIRef(uri_odrl + "hasPolicy"),
+                            )
+                        )
+                        if(contract["odrl:hasPolicy"].get("odrl:permission")):
+                            g.add(
+                                (
+                                    rdflib.URIRef(uri_hasPolicy),
+                                    rdflib.URIRef(uri_odrl + "permission"),
+                                    rdflib.Literal(contract["odrl:hasPolicy"]["odrl:permission"]),
+                                )
+                            )
+                        if(contract["odrl:hasPolicy"].get("odrl:obligation")):
+                            g.add(
+                                (
+                                    rdflib.URIRef(uri_hasPolicy),
+                                    rdflib.URIRef(uri_odrl + "obligation"),
+                                    rdflib.Literal(contract["odrl:hasPolicy"]["odrl:obligation"]),
+                                )
+                            )
+            if(dataasset.get("dcat:distribution")):
+                for distribution in dataasset["dcat:distribution"]:
+                    uri_distribution = uri_edaan + distribution["@id"]
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_dataasset),
+                            rdflib.URIRef(uri_dcat + "distribution"),
+                            rdflib.URIRef(uri_distribution),
+                        )
+                    )
+                    g.add(
+                        (
+                            rdflib.URIRef(uri_distribution),
+                            RDF.type,
+                            rdflib.URIRef(uri_dcat + "Distribution"),
+                        )
+                    )
+                    if(distribution.get("dcat:accessURL")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_distribution),
+                                rdflib.URIRef(uri_dcat + "accessURL"),
+                                rdflib.URIRef(distribution["dcat:accessURL"]),
+                            )
+                        )
+                    if(distribution.get("dct:title")):
+                        g.add(
+                            (
+                                rdflib.URIRef(uri_distribution),
+                                rdflib.URIRef(uri_dct + "title"),
+                                rdflib.Literal(distribution["dct:title"]),
+                            )
+                        )
+            if(dataasset.get("extraQualityMetadata")):
+                g.add(
+                    (
+                        rdflib.URIRef(uri_dataasset),
+                        rdflib.URIRef(uri_edaan + "extraQualityMetadata"),
+                        rdflib.Literal(dataasset["extraQualityMetadata"]),
+                    )
+                )
         
 
         if error_in_modelage != 1:
@@ -212,12 +565,11 @@ def main(schema):
                 and ".json" in file
                 and "annotation.schema.json" not in file
             ):
-                p += 1
+                
                 (graph_rdf(os.path.join(root, file), g, schema))
-    print("Number of components: ", p, "\n")
 
     owl_file = open(
-        "ontology/EDAAnOWL.ttl",
+        "output_triples.ttl",
         "w",
     )
     owl_file.write(g.serialize(format="nt"))
